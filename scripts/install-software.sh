@@ -1,34 +1,38 @@
-#!/bin/bash
+#!/bin/sh
 
-fix_arch(){
-    ARCH=`uname -m`
-    if [ "$ARCH" == "aarch64" ];then
-        echo "arm64"
-        return 0
-    fi;
+set -eu
 
-    if [ "$ARCH" == "x86_64" ];then
-        echo "amd64"
-        return 0
-    fi;
-    echo $ARCH
+NEXTTRACE_URL="https://alist.teno.dn11/d/local/nexttrace_dn11/nexttrace_linux_amd64"
+NEXTTRACE_BIN="/usr/local/bin/nexttrace"
+
+error() {
+    printf '%s\n' "$1" >&2
 }
 
-install_from_github(){
-    OWNER=$1
-    PROJECT=$2
-    SAVE_AS=$3
-    ARCH=$4
-    if [ -z "$ARCH" ];then
-        ARCH=`uname -m`
-    fi;
-    URL=$(wget -qO - https://api.github.com/repos/$1/$2/releases/latest | grep download_url | grep linux | grep $ARCH | awk -F'": "' '{print $2}' | tr '"' ' ')
+download_nexttrace() {
+    local arch tmp
+    arch=$(uname -m)
+    case "$arch" in
+        x86_64|amd64)
+            tmp=$(mktemp)
+            ;;
+        *)
+            error "Unsupported architecture for nexttrace: $arch"
+            exit 1
+            ;;
+    esac
 
-    echo "Download $URL to $SAVE_AS"
-    wget -O $SAVE_AS $URL
+    printf 'Download %s to %s\n' "$NEXTTRACE_URL" "$NEXTTRACE_BIN"
+    if ! wget --no-check-certificate -O "$tmp" "$NEXTTRACE_URL"; then
+        error "Failed to download nexttrace from $NEXTTRACE_URL"
+        rm -f "$tmp"
+        exit 1
+    fi
+
+    mv "$tmp" "$NEXTTRACE_BIN"
+    chmod 0755 "$NEXTTRACE_BIN"
 }
 
-install_from_github "nxtrace" "Ntrace-V1" "/usr/local/bin/nexttrace" `fix_arch`
-chmod +x "/usr/local/bin/nexttrace"
+download_nexttrace
 
 sh install-speedtest.sh

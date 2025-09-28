@@ -3,3 +3,7 @@ ui/public/speedtest_worker.js
 ui/pnpm-lock.yaml
 backend/embed/ui/
 tmp
+
+geofeed.csv
+ptr.csv
+nt_config.yaml

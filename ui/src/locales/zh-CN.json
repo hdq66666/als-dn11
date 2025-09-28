@@ -3,7 +3,6 @@
   "server_location": "服务器位置",
   "server_speedtest": "服务器网络测速",
   "file_speedtest": "文件下载测试",
-  "file_ipv4_speedtest": "IPv4 下载测试",
   "file_ipv6_speedtest": "IPv6 下载测试",
   "librespeed_begin": "开始测试",
   "librespeed_stop": "停止测试",

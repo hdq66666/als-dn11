@@ -10,7 +10,6 @@ COPY --from=builderNodeJSCache /app/node_modules /app/node_modules
 RUN npm run build \
     && chmod -R 650 /app/dist
 
-
 FROM alpine:3 as builderGolang
 ADD backend /app
 WORKDIR /app
@@ -34,6 +33,9 @@ RUN rm -rf /app
 FROM alpine:3
 LABEL maintainer="samlm0 <update@ifdream.net>"
 COPY --from=builderEnv / /
-COPY --from=builderGolang --chmod=777 /app/als/als /bin/als
+COPY --from=builderGolang --chmod=755 /app/als/als /bin/als
+COPY --chmod=755 scripts/ntr-wrapper.sh /usr/local/bin/ntr
+COPY --chmod=755 scripts/ntr-sync.sh /usr/local/bin/ntr-sync.sh
+COPY --chmod=755 scripts/ntr-runtime.sh /usr/local/bin/ntr-runtime.sh
 
-CMD /bin/als
+CMD ["/usr/local/bin/ntr-runtime.sh"]

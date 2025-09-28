@@ -1,34 +1,37 @@
 [![docker image build](https://github.com/wikihost-opensource/als/actions/workflows/docker-image.yml/badge.svg)](https://github.com/wikihost-opensource/als/actions/workflows/docker-image.yml)
 
-
 Language: English | [简体中文](README_zh_CN.md)
 
 # ALS - Another Looking-glass Server
 
 ## Quick start
-```
-docker run -d --name looking-glass --restart always --network host wikihostinc/looking-glass-server
+Build and run the container locally:
+```bash
+docker build -t als-dn11 .
+docker run -d \
+  --name looking-glass \
+  --restart always \
+  --network host \
+  als-dn11
 ```
 
 [DEMO](http://lg.hk1-bgp.hkg.50network.com/)
 
-If you don't want to use Docker , you can use the [compiled server](https://github.com/wikihost-opensource/als/releases)
+If you don't want to use Docker, you can use the [compiled server](https://github.com/wikihost-opensource/als/releases).
 
 ## Host Requirements
- - RAM: 32MB or more
+- RAM: 32MB or more
 
 ## How to change config
-```
-# you need pass -e KEY=VALUE to docker command
-# you can find the KEY below the [Image Environment Variables]
-# for example, change the listen port to 8080
+Pass environment variables during `docker run` to change defaults. Example: change the listen port to 8080.
+```bash
 docker run -d \
-    --name looking-glass \
-    -e HTTP_PORT=8080 \
-    --restart always \
-    --network host \
-    wikihostinc/looking-glass-server
-``` 
+  --name looking-glass \
+  -e HTTP_PORT=8080 \
+  --restart always \
+  --network host \
+  als-dn11
+```
 
 ## Environment variable table
 | Key                       | Example                                                                | Default                                                    | Description                                                                             |
@@ -49,6 +52,9 @@ docker run -d \
 | UTILITIES_IPERF3_PORT_MAX | 31000                                                                  | 31000                                                      | iperf3 listen port range - to                                                           |
 | SPONSOR_MESSAGE           | "Test message" or "/tmp/als_readme.md" or "http://some_host/114514.md" | ''                                                         | Show server sponsor message (support markdown file, required mapping file to container) |
 
+## Runtime notes
+- `ntr` is provided as an alias for NextTrace DN42 mode. Fake shell sessions expose `ntr` and hide the raw `nexttrace` binary.
+- `geofeed.csv` and `ptr.csv` are refreshed every 30 minutes from the internal mirror. Paths are kept in sync inside `nt_config.yaml` under `/opt/ntr`.
 
 ## Features
 - [x] HTML 5 Speed Test
@@ -58,6 +64,7 @@ docker run -d \
 - [x] Speedtest.net Client
 - [x] Online shell box (limited commands)
 - [x] [NextTrace](https://github.com/nxtrace/NTrace-core) Support
+
 ## Thanks to
 https://github.com/librespeed/speedtest
 

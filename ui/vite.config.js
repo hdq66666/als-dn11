@@ -43,17 +43,24 @@ export default defineConfig(({ command }) => {
         name: 'build-script',
         buildStart(options) {
           if (command === 'build') {
-            const dirPath = path.join(__dirname, 'public');
+            const dirPath = path.join(__dirname, 'public')
             const fileBuildRequired = {
-              "speedtest_worker.js": "../speedtest/speedtest_worker.js"
-            };
+              'speedtest_worker.js': path.join('..', 'speedtest', 'speedtest_worker.js')
+            }
 
-            for (var dest in fileBuildRequired) {
-              const source = fileBuildRequired[dest]
-              if (fs.existsSync(dirPath + "/" + dest)) {
-                fs.unlinkSync(dirPath + "/" + dest)
+            for (const [dest, relativeSource] of Object.entries(fileBuildRequired)) {
+              const destPath = path.join(dirPath, dest)
+              const sourcePath = path.join(dirPath, relativeSource)
+
+              if (!fs.existsSync(sourcePath)) {
+                console.warn(`[build-script] skip ${dest}: source missing at ${sourcePath}`)
+                continue
               }
-              fs.copyFileSync(dirPath + "/" + source, dirPath + "/" + dest)
+
+              if (fs.existsSync(destPath)) {
+                fs.unlinkSync(destPath)
+              }
+              fs.copyFileSync(sourcePath, destPath)
             }
           }
         },

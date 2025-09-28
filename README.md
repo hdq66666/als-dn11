@@ -38,7 +38,6 @@ docker run -d \
 | ------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | LISTEN_IP                 | 127.0.0.1                                                              | (all ip)                                                   | which IP address will be listen use                                                     |
 | HTTP_PORT                 | 80                                                                     | 80                                                         | which HTTP port should use                                                              |
-| SPEEDTEST_FILE_LIST       | 100MB 1GB                                                              | 1MB 10MB 100MB 1GB                                         | size of static test files, separate with space                                          |
 | LOCATION                  | "this is location"                                                     | (request from http://ipapi.co) | location string                                                                         |
 | PUBLIC_IPV4               | 1.1.1.1                                                                | (fetch from http://ifconfig.co)                            | The IPv4 address of the server                                                          |
 | PUBLIC_IPV6               | fe80::1                                                                | (fetch from http://ifconfig.co)                            | The IPv6 address of the server                                                          |
@@ -55,6 +54,7 @@ docker run -d \
 ## Runtime notes
 - `ntr` is provided as an alias for NextTrace DN42 mode. Fake shell sessions expose `ntr` and hide the raw `nexttrace` binary.
 - `geofeed.csv` and `ptr.csv` are refreshed every 30 minutes from the internal mirror. Paths are kept in sync inside `nt_config.yaml` under `/opt/ntr`.
+- File download speedtest has been removed from the UI; only HTML5/LibreSpeed measurements remain.
 
 ## Features
 - [x] HTML 5 Speed Test

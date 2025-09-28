@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import fs from 'node:fs'
 import path from 'node:path'
+import https from 'node:https'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -41,20 +42,42 @@ export default defineConfig(({ command }) => {
       }),
       {
         name: 'build-script',
-        buildStart(options) {
+        async buildStart(options) {
           if (command === 'build') {
             const dirPath = path.join(__dirname, 'public')
             const fileBuildRequired = {
               'speedtest_worker.js': path.join('..', 'speedtest', 'speedtest_worker.js')
             }
+            const remoteFallback = process.env.SPEEDTEST_WORKER_URL || 'https://raw.githubusercontent.com/librespeed/speedtest/master/speedtest_worker.js'
+
+            const download = (url, destination) => new Promise((resolve, reject) => {
+              const file = fs.createWriteStream(destination)
+              https.get(url, (response) => {
+                if (response.statusCode !== 200) {
+                  reject(new Error(`unexpected status ${response.statusCode} while downloading ${url}`))
+                  response.resume()
+                  return
+                }
+                response.pipe(file)
+                file.on('finish', () => file.close(resolve))
+              }).on('error', (err) => {
+                reject(err)
+              })
+            })
 
             for (const [dest, relativeSource] of Object.entries(fileBuildRequired)) {
               const destPath = path.join(dirPath, dest)
               const sourcePath = path.join(dirPath, relativeSource)
 
               if (!fs.existsSync(sourcePath)) {
-                console.warn(`[build-script] skip ${dest}: source missing at ${sourcePath}`)
-                continue
+                console.warn(`[build-script] ${sourcePath} missing, fetching ${remoteFallback}`)
+                try {
+                  await download(remoteFallback, destPath)
+                  continue
+                } catch (error) {
+                  console.warn(`[build-script] failed to download worker: ${error.message}`)
+                  continue
+                }
               }
 
               if (fs.existsSync(destPath)) {

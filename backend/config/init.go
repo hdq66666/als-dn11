@@ -53,7 +53,7 @@ func GetDefaultConfig() *ALSConfig {
 		FeaturePing:            true,
 		FeatureShell:           true,
 		FeatureLibrespeed:      true,
-		FeatureFileSpeedtest:   true,
+		FeatureFileSpeedtest:   false,
 		FeatureSpeedtestDotNet: true,
 		FeatureIperf3:          true,
 		FeatureMTR:             true,

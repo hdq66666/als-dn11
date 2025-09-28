@@ -26,6 +26,17 @@ fetch_file() {
     return 0
 }
 
+ensure_placeholder() {
+    file="$1"
+    dest="$NTR_HOME/$file"
+    if [ -f "$dest" ]; then
+        return
+    fi
+    printf '# placeholder created %s\n' "$(date -u +%FT%TZ)" >"$dest"
+    chmod 0644 "$dest"
+    log "created placeholder for $file"
+}
+
 update_config() {
     cfg="$NTR_HOME/nt_config.yaml"
     geopath="$NTR_HOME/geofeed.csv"
@@ -53,6 +64,10 @@ for f in $FILES; do
     if ! fetch_file "$f"; then
         status=1
     fi
+done
+
+for f in $FILES; do
+    ensure_placeholder "$f"
 done
 
 update_config

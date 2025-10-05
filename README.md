@@ -2,7 +2,7 @@
 
 Language: English | [简体中文](README_zh_CN.md)
 
-# ALS - Another Looking-glass Server
+# ALS - DN11 customized
 
 ## Quick start
 Build and run the container locally:

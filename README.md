@@ -17,7 +17,7 @@ docker run -d \
 
 [DEMO](http://lg.hk1-bgp.hkg.50network.com/)
 
-If you don't want to use Docker, you can use the [compiled server](https://github.com/wikihost-opensource/als/releases).
+
 
 ## Host Requirements
 - RAM: 32MB or more

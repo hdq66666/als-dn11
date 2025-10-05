@@ -2,7 +2,7 @@
 
 语言: [English](README.md) | 简体中文
 
-# ALS - 另一个 Looking-glass 服务器
+# ALS - DN11 定制版
 
 ## 快速开始 (Docker 环境)
 在项目根目录构建镜像并运行：

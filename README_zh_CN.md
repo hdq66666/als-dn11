@@ -53,7 +53,7 @@ docker run -d \
 
 ## 运行说明
 - 容器内提供 `ntr` 命令运行 NextTrace 的 DN42 模式，Fake Shell 中只暴露该命令。
-- `geofeed.csv` 与 `ptr.csv` 每 30 分钟从内网镜像同步一次，`/opt/ntr/nt_config.yaml` 会自动保持正确路径。
+- `geofeed.csv` 与 `ptr.csv` 会在容器启动时从 `https://git.baimeow.dn11/hdq66666/ntr/raw/branch/main/` 拉取，`/opt/ntr/nt_config.yaml` 会自动保持正确路径。
 - 已移除文件下载测速功能界面，仅保留 HTML5/LibreSpeed 测速。
 
 ## 功能

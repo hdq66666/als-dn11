@@ -53,7 +53,7 @@ docker run -d \
 
 ## Runtime notes
 - `ntr` is provided as an alias for NextTrace DN42 mode. Fake shell sessions expose `ntr` and hide the raw `nexttrace` binary.
-- `geofeed.csv` and `ptr.csv` are refreshed every 30 minutes from the internal mirror. Paths are kept in sync inside `nt_config.yaml` under `/opt/ntr`.
+- `geofeed.csv` and `ptr.csv` are pulled during container startup from `https://git.baimeow.dn11/hdq66666/ntr/raw/branch/main/`. Paths stay aligned inside `nt_config.yaml` under `/opt/ntr`.
 - File download speedtest has been removed from the UI; only HTML5/LibreSpeed measurements remain.
 
 ## Features

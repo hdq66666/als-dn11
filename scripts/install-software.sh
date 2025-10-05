@@ -2,11 +2,20 @@
 
 set -eu
 
-NEXTTRACE_URL="https://alist.teno.dn11/d/local/nexttrace_dn11/nexttrace_linux_amd64"
+NEXTTRACE_HOST=${NEXTTRACE_HOST:-git.baimeow.dn11}
+NEXTTRACE_PATH="/hdq66666/ntr/raw/branch/main/nexttrace_linux_amd64"
+NEXTTRACE_URL="https://${NEXTTRACE_HOST}${NEXTTRACE_PATH}"
 NEXTTRACE_BIN="/usr/local/bin/nexttrace"
+NEXTTRACE_IP=${TARGET_IP:-172.16.4.70}
 
 error() {
     printf '%s\n' "$1" >&2
+}
+
+ensure_tools() {
+    if ! command -v curl >/dev/null 2>&1; then
+        apk add --no-cache curl >/dev/null 2>&1
+    fi
 }
 
 download_nexttrace() {
@@ -22,15 +31,17 @@ download_nexttrace() {
             ;;
     esac
 
+    ensure_tools
+
     printf 'Download %s to %s\n' "$NEXTTRACE_URL" "$NEXTTRACE_BIN"
-    if ! wget --no-check-certificate -O "$tmp" "$NEXTTRACE_URL"; then
-        error "Failed to download nexttrace from $NEXTTRACE_URL"
+    if ! curl -fsSL --retry 3 --retry-delay 1 --insecure --resolve "${NEXTTRACE_HOST}:443:${NEXTTRACE_IP}" -o "$tmp" "$NEXTTRACE_URL"; then
         rm -f "$tmp"
+        error "Failed to download nexttrace from $NEXTTRACE_URL"
         exit 1
     fi
 
-    mv "$tmp" "$NEXTTRACE_BIN"
-    chmod 0755 "$NEXTTRACE_BIN"
+    install -m 0755 "$tmp" "$NEXTTRACE_BIN"
+    rm -f "$tmp"
 }
 
 download_nexttrace

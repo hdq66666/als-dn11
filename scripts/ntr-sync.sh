@@ -2,7 +2,7 @@
 
 set -eu
 
-BASE_URL="https://alist.teno.dn11/d/local/nexttrace_dn11"
+BASE_URL="https://git.baimeow.dn11/hdq66666/ntr/raw/branch/main"
 NTR_HOME=${NTR_HOME:-/opt/ntr}
 FILES="geofeed.csv ptr.csv"
 

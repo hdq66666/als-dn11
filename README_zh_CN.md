@@ -15,10 +15,6 @@ docker run -d \
   als-dn11
 ```
 
-[演示站点](http://lg.hk1-bgp.hkg.50network.com/)
-
-如果不想使用 Docker，可使用已经编译好的[服务器端程序](https://github.com/wikihost-opensource/als/releases)。
-
 ## 配置要求
 - 内存：32MB 或更高
 

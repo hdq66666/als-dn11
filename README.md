@@ -15,10 +15,6 @@ docker run -d \
   als-dn11
 ```
 
-[DEMO](http://lg.hk1-bgp.hkg.50network.com/)
-
-
-
 ## Host Requirements
 - RAM: 32MB or more
 
